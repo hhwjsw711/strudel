@@ -1,0 +1,323 @@
+---
+title: 第一个效果
+layout: ../../../layouts/MainLayout.astro
+---
+
+import { MiniRepl } from '../../../docs/MiniRepl';
+import QA from '@components/QA';
+
+# 第一个效果
+
+import Box from '@components/Box.astro';
+
+## 一些基本效果
+
+**低通滤波器**
+
+<MiniRepl
+  client:visible
+  tune={`note("<[c2 c3]*4 [bb1 bb2]*4 [f2 f3]*4 [eb2 eb3]*4>/2")
+.sound("sawtooth").lpf(800)`}
+/>
+
+<Box>
+
+lpf = **l**ow **p**ass **f**ilter
+
+- 将 `lpf` 改为 200。你听到贝斯听起来更闷吗？听起来像音乐在关着的门后播放 🚪
+- 现在让我们打开门：将 `lpf` 改为 5000。声音变得更亮更尖 ✨🪩
+
+</Box>
+
+**自动化滤波器**
+
+<MiniRepl
+  client:visible
+  tune={`note("<[c2 c3]*4 [bb1 bb2]*4 [f2 f3]*4 [eb2 eb3]*4>/2")
+.sound("sawtooth").lpf("200 1000")`}
+/>
+
+<Box>
+
+- 添加更多 `lpf` 值
+- `lpf` 中的模式不改变贝斯线的节奏
+
+稍后我们会看到如何用波形自动化事物。
+
+</Box>
+
+**vowel = 元音**
+
+<MiniRepl
+  client:visible
+  tune={`note("<[c3,g3,e4] [bb2,f3,d4] [a2,f3,c4] [bb2,g3,eb4]>/2")
+.sound("sawtooth").vowel("<a e i o>/2")`}
+/>
+
+**gain = 增益**
+
+<MiniRepl
+  client:visible
+  tune={`stack(
+  sound("hh*8").gain("[.25 1]*2"),
+  sound("bd*2,~ sd:1")
+) `}
+  punchcard
+/>
+
+<Box>
+
+在节奏中，动态（= 音量的变化）非常重要。
+
+- 移除 `.gain(...)` 并注意它听起来多平。
+- 撤销（strg+z 然后 strg+enter）
+
+</Box>
+
+**stacks in stacks**
+
+让我们组合上面的例子：
+
+<MiniRepl
+  client:visible
+  tune={`stack(
+  stack(
+    sound("hh*8").gain("[.25 1]*2"),
+    sound("bd*2,~ sd:1")
+  ),
+  note("<[c2 c3]*4 [bb1 bb2]*4 [f2 f3]*4 [eb2 eb3]*4>/2")
+  .sound("sawtooth").lpf("200 1000"),
+  note("<[c3,g3,e4] [bb2,f3,d4] [a2,f3,c4] [bb2,g3,eb4]>/2")
+  .sound("sawtooth").vowel("<a e i o>/2")
+) `}
+/>
+
+<Box>
+
+尝试识别 `stack` 中的各个部分。看看逗号是如何放置的。
+
+3 个部分（鼓、贝斯、和弦）就像以前一样，只是在一个 `stack` 中，用逗号分隔。
+
+</Box>
+
+**用 ADSR 包络整形声音**
+
+<MiniRepl
+  client:visible
+  tune={`note("<c3 bb2 f3 eb3>")
+.sound("sawtooth").lpf(600)
+.attack(.1)
+.decay(.1)
+.sustain(.25)
+.release(.2)`}
+/>
+
+<Box>
+
+尝试找出数字的作用。试试以下：
+
+- attack: `.5` vs `0`
+- decay: `.5` vs `0`
+- sustain: `1` vs `.25` vs `0`
+- release: `0` vs `.5` vs `1`
+
+你能猜出每个值的作用吗？
+
+</Box>
+
+<QA q="显示答案" client:visible>
+
+- attack (攻击): 上升时间
+- decay (衰减): 下降时间
+- sustain (维持): 下降后的音量
+- release (释放): 结束后的下降时间
+
+![ADSR](https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/ADSR_parameter.svg/1920px-ADSR_parameter.svg.png)
+
+</QA>
+
+**adsr 简写**
+
+<MiniRepl
+  client:visible
+  tune={`note("<c3 bb2 f3 eb3>")
+.sound("sawtooth").lpf(600)
+.adsr(".1:.1:.5:.2")
+`}
+/>
+
+**delay = 延迟**
+
+<MiniRepl
+  client:visible
+  tune={`stack(
+  note("~ [<[d3,a3,f4]!2 [d3,bb3,g4]!2> ~]")
+  .sound("gm_electric_guitar_muted"),
+  sound("<bd rim>").bank("RolandTR707")
+).delay(".5")`}
+/>
+
+<Box>
+
+尝试不同的 `delay` 值在 0 和 1 之间。顺便说一句：`.5` 是 `0.5` 的简写。
+
+当你写 `.delay(".8:.125")` 时会发生什么？你能猜出第二个数字的作用吗？
+
+当你写 `.delay(".8:.06:.8")` 时会发生什么？你能猜出第三个数字的作用吗？
+
+</Box>
+
+<QA q="显示答案" client:visible>
+
+`delay("a:b:c")`:
+
+- a: 延迟的音量
+- b: 延迟时间
+- c: 反馈（越小，延迟消失越快）
+
+</QA>
+
+**room aka reverb = 混响**
+
+<MiniRepl
+  client:visible
+  tune={`n("<4 [3@3 4] [<2 0> ~@16] ~>/2")
+.scale("D4:minor").sound("gm_accordion:2")
+.room(2)`}
+/>
+
+<Box>
+
+玩不同的值。
+
+也添加延迟！
+
+</Box>
+
+**小 Dub 调**
+
+<MiniRepl
+  client:visible
+  tune={`stack(
+  note("~ [<[d3,a3,f4]!2 [d3,bb3,g4]!2> ~]")
+  .sound("gm_electric_guitar_muted").delay(.5),
+  sound("<bd rim>").bank("RolandTR707").delay(.5),
+  n("<4 [3@3 4] [<2 0> ~@16] ~>/2")
+  .scale("D4:minor").sound("gm_accordion:2")
+  .room(2).gain(.5)
+)`}
+/>
+
+对于真正的 Dub，还缺贝斯：
+
+<MiniRepl
+  client:visible
+  tune={`stack(
+  note("~ [<[d3,a3,f4]!2 [d3,bb3,g4]!2> ~]")
+  .sound("gm_electric_guitar_muted").delay(.5),
+  sound("<bd rim>").bank("RolandTR707").delay(.5),
+  n("<4 [3@3 4] [<2 0> ~@16] ~>/2")
+  .scale("D4:minor").sound("gm_accordion:2")
+  .room(2).gain(.4),
+  n("<0 [~ 0] 4 [3 2] [0 ~] [0 ~] <0 2> ~>*2")
+  .scale("D2:minor")
+  .sound("sawtooth,triangle").lpf(800)
+)`}
+/>
+
+<Box>
+
+在 stack 中的模式末尾添加 `.hush()`...
+
+</Box>
+
+**pan = 全景**
+
+<MiniRepl
+  client:visible
+  tune={`sound("numbers:1 numbers:2 numbers:3 numbers:4")
+.pan("0 0.3 .6 1")
+.slow(2)`}
+/>
+
+**speed = 速度**
+
+<MiniRepl client:visible tune={`sound("bd rim").speed("<1 2 -1 -2>").room(.2)`} />
+
+**fast and slow = 快和慢**
+
+用 `fast` 和 `slow` 可以在 Mini-Notation 之外改变模式的节奏：
+
+<MiniRepl client:visible tune={`sound("bd*2,~ rim").slow(2)`} />
+
+<Box>
+
+改变 `slow` 值。用 `fast` 替换 `slow`。
+
+当你自动化值时会发生什么？例如 `.fast("<1 [2 4]>")` ？
+
+</Box>
+
+顺便说一句，在 Mini-Notation 内：`fast` 是 `*` 而 `slow` 是 `/`。
+
+<MiniRepl client:visible tune={`sound("[bd*2,~ rim]*<1 [2 4]>")`} />
+
+## 用信号自动化
+
+我们可以用所谓的信号自动化值，而不是逐步：
+
+<MiniRepl client:visible tune={`sound("hh*16").gain(sine)`} punchcard punchcardLabels={false} />
+
+<Box>
+
+基本波形是 `sine`, `saw`, `square`, `tri` 🌊
+
+也试试随机信号 `rand` 和 `perlin`！
+
+`gain` 值（增益）在可视化中显示为透明度。
+
+</Box>
+
+**用 `range` 改变范围**
+
+信号默认在 0 和 1 之间移动。我们可以用 `range` 改变：
+
+<MiniRepl client:visible tune={`sound("hh*8").lpf(saw.range(500, 2000))`} />
+
+`range` 在我们想用不同于 0 和 1 的值范围自动化函数时有用（例如 `lpf`）
+
+<Box>
+
+当你交换两个值时会发生什么？
+
+</Box>
+
+我们可以用 slow / fast 改变自动化的速度：
+
+<MiniRepl
+  client:visible
+  tune={`note("<[c2 c3]*4 [bb1 bb2]*4 [f2 f3]*4 [eb2 eb3]*4>/2")
+.sound("sawtooth")
+.lpf(sine.range(100, 2000).slow(8))`}
+/>
+
+<Box>
+
+整个自动化现在需要 8 个周期重复。
+
+</Box>
+
+## 回顾
+
+| 名称  | 示例                                                                                |
+| ----- | --------------------------------------------------------------------------------------- |
+| lpf   | <MiniRepl client:visible tune={`note("c2 c3").s("sawtooth").lpf("<400 2000>")`} />      |
+| vowel | <MiniRepl client:visible tune={`note("c3 eb3 g3").s("sawtooth").vowel("<a e i o>")`} /> |
+| gain  | <MiniRepl client:visible tune={`s("hh*8").gain("[.25 1]*2")`} />                        |
+| delay | <MiniRepl client:visible tune={`s("bd rim").delay(.5)`} />                              |
+| room  | <MiniRepl client:visible tune={`s("bd rim").room(.5)`} />                               |
+| pan   | <MiniRepl client:visible tune={`s("bd rim").pan("0 1")`} />                             |
+| speed | <MiniRepl client:visible tune={`s("bd rim").speed("<1 2 -1 -2>")`} />                   |
+| range | <MiniRepl client:visible tune={`s("hh*16").lpf(saw.range(200,4000))`} />                |
+
+现在让我们看看典型的 Tidal [模式效果](/zh/workshop/pattern-effects)。

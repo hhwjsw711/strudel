@@ -1,0 +1,410 @@
+---
+title: 第一个声音
+layout: ../../../layouts/MainLayout.astro
+---
+
+import { MiniRepl } from '@src/docs/MiniRepl';
+import Box from '@components/Box.astro';
+import QA from '@components/QA';
+
+# 第一个声音
+
+这是 Strudel 工作坊的第一个章节，很高兴你加入！
+
+## 文本框
+
+工作坊充满了互动文本框。让我们学习它们如何工作。这里有一个：
+
+<MiniRepl client:visible tune={`sound("casio")`} />
+
+<Box>
+
+1. ⬆️ 点击上面的文本框 ⬆️
+2. 按 `Strg`+`Enter` 播放
+3. 将 `casio` 改为 `metal`
+4. 按 `Strg`+`Enter` 更新
+5. 按 `Strg`+`Punkt` 停止
+
+Mac: `Strg` = `control` 或 `option`
+
+</Box>
+
+恭喜，你现在可以实时编码了！
+
+## 声音
+
+刚才我们已经用 `sound` 播放了第一个声音：
+
+<MiniRepl client:visible tune={`sound("casio")`} />
+
+<Box>
+
+`casio` 是众多标准声音之一。
+
+试试其他一些声音：
+
+```
+insect wind jazz metal east crow casio space numbers
+```
+
+加载新声音时，你可能会短暂听不到声音。
+
+</Box>
+
+**用 : 改变样本编号**
+
+一个声音可以包含多个样本（音频文件）。
+
+你可以通过在声音名称后附加 `:` 和数字来选择不同的样本：
+
+<MiniRepl client:visible tune={`sound("casio:1")`} />
+
+<Box>
+
+尝试不同的声音/数字组合。
+
+没有数字相当于 `:0`
+
+</Box>
+
+现在你知道如何播放声音并设置它们的样本编号了。
+
+暂时我们会坚持使用预设声音，后来我们会学习如何使用自己的声音。
+
+## 鼓声
+
+Strudel 自带广泛的鼓声选择：
+
+<MiniRepl client:visible tune={`sound("bd hh sd oh")`} />
+
+<Box>
+
+这些字母组合代表鼓组的不同部分：
+
+<img src="/img/drumset.png" />
+
+<a class="text-right text-xs" href="https://de.wikipedia.org/wiki/Schlagzeug#/media/Datei:Drum_set.svg" target="_blank">
+  原文由 Pbroks13
+</a>
+
+- `bd` = **b**ass **d**rum - 低音鼓
+- `sd` = **s**nare **d**rum - 小鼓
+- `rim` = **rim**shot - 边击
+- `hh` = **h**i**h**at - 踩镲
+- `oh` = **o**pen **h**ihat - 开镲
+- `lt` = **l**ow tom
+- `mt` = **m**iddle tom
+- `ht` = **h**igh tom
+- `rd` = **r**i**d**e cymbal
+- `cr` = **cr**ash cymbal
+
+尝试不同的声音！
+</Box>
+
+我们可以通过用 `bank` 选择鼓机来改变鼓声的特性：
+
+<MiniRepl client:visible tune={`sound("bd hh sd oh").bank("RolandTR909")`} />
+
+在这个例子中，`RolandTR909` 是鼓机的名称，它对 House 和 Techno 音乐产生了重大影响。
+
+<Box>
+
+将 `RolandTR909` 改为
+
+- `AkaiLinn`
+- `RhythmAce`
+- `RolandTR808`
+- `RolandTR707`
+- `ViscoSpaceDrum`
+
+还有更多，但这应该足够开始了..
+
+🦥 懒人提示：双击名称以标记它。
+然后你可以用 `Strg`+`C` 复制，用 `Strg`+`V` 粘贴。
+
+</Box>
+
+## 序列
+
+在最后一个例子中，我们已经看到可以通过用空格分隔来连续播放多个声音：
+
+<MiniRepl client:visible tune={`sound("bd hh sd hh")`} punchcard />
+
+注意当前播放的声音在代码中被标记，并在下面可视化。
+
+<Box>
+
+尝试添加更多声音！
+
+</Box>
+
+**序列越长，越快**
+
+<MiniRepl client:visible tune={`sound("bd bd hh bd rim bd hh bd")`} punchcard />
+
+序列的内容被压缩成一个所谓的 Cycle（周期）。一个 Cycle 默认是 2 秒长。
+
+**每个 Cycle 一个，用 `< .. >`**
+
+这里是同样的序列，但这次用 `< .. >`（尖括号）包围：
+
+<MiniRepl client:visible tune={`sound("<bd bd hh bd rim bd hh bd>")`} punchcard />
+
+现在每个 Cycle 只播放一个声音。用这些括号，无论包含多少元素，节奏都保持不变！
+
+但现在有点慢，让我们用 `*` 加快：
+
+<MiniRepl client:visible tune={`sound("<bd bd hh bd rim bd hh bd>*8")`} punchcard />
+
+`*8` 使整个序列快 8 倍。
+
+<Box>
+
+等等，这不是和没有 `< ... >*8` 一样吗？那有什么用？
+
+正确，这种写法的真正优势在于当你移除或添加元素时。试试看！
+
+也改变末尾的数字来改变节奏。
+
+</Box>
+
+**用 `setcpm` 改变节奏**
+
+<MiniRepl
+  client:visible
+  tune={`setcpm(90/4)
+sound("<bd hh rim hh>*8")`}
+  punchcard
+/>
+
+<Box>
+
+cpm = **c**ycles per **m**inute = 每分钟周期数
+
+节奏默认是 30 周期每分钟 = 120/4 = 1 周期每 2 秒
+
+在传统音乐术语中，可以说上面的模式由 90bpm 4/4 拍子的八分音符组成。
+
+别担心如果你不明白这些术语，这不是用 Strudel 制作音乐所必需的。
+
+</Box>
+
+我们稍后会学习更多改变节奏的方法。
+
+**用 '-' 或 '~' 暂停**
+
+<MiniRepl client:visible tune={`sound("bd hh - rim")`} punchcard />
+
+<Box>
+
+你可能也会看到其他人用 '~' 作为暂停符号。
+特别是对于德语键盘，`-` 是难以输入的 `~` 的替代品。
+
+</Box>
+
+**用 [括号] 子序列**
+
+<MiniRepl client:visible tune={`sound("bd [hh hh] rim [hh hh]")`} punchcard />
+
+<Box>
+
+括号的内容也被压缩！
+
+在括号中添加更多声音！
+
+</Box>
+
+就像整个序列一样，子序列包含越多就越快。
+
+**乘法：使东西更快**
+
+<MiniRepl client:visible tune={`sound("bd hh*2 sd hh*3")`} punchcard />
+
+**乘法：非常快**
+
+<MiniRepl client:visible tune={`sound("bd hh*16 sd hh*8")`} punchcard />
+
+<Box>
+
+音高 = 非常快的节奏
+
+</Box>
+
+**乘法：使整个子序列更快**
+
+<MiniRepl client:visible tune={`sound("bd [sd hh]*2")`} punchcard />
+
+Bolero：
+
+<MiniRepl
+  client:visible
+  tune={`
+setcpm(10)
+sound("sd sd*3 sd sd*3 sd sd sd sd*3 sd sd*3 sd*3 sd*3")`}
+  punchcard
+/>
+
+**用 [[括号]] 子子序列**
+
+<MiniRepl client:visible tune={`sound("bd [[rim rim] hh]")`} punchcard />
+
+<Box>
+
+你可以嵌套得尽可能深！
+
+</Box>
+
+**用逗号并行序列**
+
+<MiniRepl client:visible tune={`sound("hh hh hh, bd casio")`} punchcard />
+
+你可以根据需要使用尽可能多的逗号：
+
+<MiniRepl client:visible tune={`sound("hh hh hh, bd bd, - casio")`} punchcard />
+
+逗号也可以在子序列中使用：
+
+<MiniRepl client:visible tune={`sound("bd [bd,casio]")`} punchcard />
+
+<Box>
+
+你注意到最后两个例子听起来一样吗？
+
+经常有多种方式表达同一个想法。
+
+</Box>
+
+**用 \` (反引号) 写多行**
+
+<MiniRepl
+  client:visible
+  tune={`sound(\`bd*2, - cp, 
+- - - oh, hh*4,
+[- casio]*2\`)`}
+  punchcard
+/>
+
+<Box>
+
+使用 " 或 \` 只是清晰度的问题。
+
+</Box>
+
+**单独选择样本编号**
+
+如果只用一个声音的不同样本编号，看起来像这样：
+
+<MiniRepl client:visible tune={`sound("jazz:0 jazz:1 [jazz:4 jazz:2] jazz:3*2")`} punchcard />
+
+同样可以这样写：
+
+<MiniRepl client:visible tune={`n("0 1 [4 2] 3*2").sound("jazz")`} punchcard />
+
+## 回顾
+
+我们现在已经学习了所谓的 Mini-Notation 的基础知识，Tidal 的节奏语言。
+
+我们迄今学到的：
+
+| 概念               | 语法      | 示例                                                               |
+| --------------------- | ----------- | --------------------------------------------------------------------- |
+| 序列               | 空格 | <MiniRepl client:visible tune={`sound("bd bd sd hh")`} />             |
+| 声音编号          | :x          | <MiniRepl client:visible tune={`sound("hh:0 hh:1 hh:2 hh:3")`} />     |
+| 暂停                | -           | <MiniRepl client:visible tune={`sound("metal - jazz jazz:1")`} />     |
+| 子序列       | \[\]        | <MiniRepl client:visible tune={`sound("bd wind [metal jazz] hh")`} /> |
+| 子子序列 | \[\[\]\]    | <MiniRepl client:visible tune={`sound("bd [metal [jazz sd]]")`} />    |
+| 更快             | \*          | <MiniRepl client:visible tune={`sound("bd sd*2 cp*3")`} />            |
+| 并行              | ,           | <MiniRepl client:visible tune={`sound("bd*2, hh*2 [hh oh]")`} />      |
+
+用引号包围的 Mini-Notation 通常在所谓的函数中使用。
+我们已经看到的函数：
+
+| 名称   | 描述                            | 示例                                                                 |
+| ------ | -------------------------------------- | ----------------------------------------------------------------------- |
+| sound  | 播放指定名称的声音         | <MiniRepl client:visible tune={`sound("bd sd")`} />                     |
+| bank   | 选择音库 / 鼓机     | <MiniRepl client:visible tune={`sound("bd sd").bank("RolandTR909")`} /> |
+| setcpm | 节奏以 **C**ycles **p**ro **M**inute | <MiniRepl client:visible tune={`setcpm(90); sound("bd sd")`} />         |
+| n      | 样本编号                          | <MiniRepl client:visible tune={`n("0 1 4 2").sound("jazz")`} />         |
+
+## 示例
+
+**简单摇滚节拍**
+
+<MiniRepl
+  client:visible
+  tune={`setcpm(100/2)
+sound("bd sd, hh*4").bank("RolandTR505")`}
+  punchcard
+/>
+
+**经典 House**
+
+<MiniRepl client:visible tune={`sound("bd*2, - cp, [- hh]*2").bank("RolandTR909")`} punchcard />
+
+<Box>
+
+你注意到最后两个模式非常相似吗？
+某些鼓模式经常跨流派重复使用。
+
+</Box>
+
+We Will Rock you
+
+<MiniRepl
+  client:visible
+  tune={`setcpm(81/2)
+sound("bd*2 cp").bank("RolandTR707")`}
+  punchcard
+/>
+
+**Yellow Magic Orchestra - Firecracker**
+
+<MiniRepl
+  client:visible
+  tune={`sound("bd sd, - - - hh - hh - -, - perc - perc:1*2")
+.bank("RolandCompurhythm1000")`}
+  punchcard
+/>
+
+**模仿 16 步序列器**
+
+<MiniRepl
+  client:visible
+  tune={`setcpm(90/4)
+sound(\`
+[-  -  oh - ] [-  -  -  - ] [-  -  -  - ] [-  -  -  - ],
+[hh hh -  - ] [hh -  hh - ] [hh -  hh - ] [hh -  hh - ],
+[-  -  -  - ] [cp -  -  - ] [-  -  -  - ] [cp -  -  - ],
+[bd -  -  - ] [-  -  -  bd] [-  -  bd - ] [-  -  -  bd]
+\`)`}
+  punchcard
+/>
+
+**另一个**
+
+<MiniRepl
+  client:visible
+  tune={`setcpm(88/4)
+sound(\`
+[-  -  -  - ] [-  -  -  - ] [-  -  -  - ] [-  -  oh:1 - ],
+[hh hh hh hh] [hh hh hh hh] [hh hh hh hh] [hh hh -  - ],
+[-  -  -  - ] [cp -  -  - ] [-  -  -  - ] [-  -  cp -  - ],
+[bd bd -  - ] [-  -  bd - ] [bd bd - bd ] [-  -  -  - ]
+\`).bank("RolandTR808")`}
+  punchcard
+/>
+
+**不太典型的鼓**
+
+<MiniRepl
+  client:visible
+  tune={`setcpm(100/2)
+s(\`jazz*2, 
+insect [crow metal] - -, 
+- space:4 - space:1,
+- wind\`)`}
+  punchcard
+/>
+
+现在我们对如何用 Strudel 构建节拍有了基本了解！
+在下一章，我们将播放一些 [音符](/zh/workshop/first-notes)。

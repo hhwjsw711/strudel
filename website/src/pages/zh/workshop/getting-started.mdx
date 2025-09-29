@@ -1,0 +1,80 @@
+---
+title: 介绍
+layout: ../../../layouts/MainLayout.astro
+---
+
+import { MiniRepl } from '../../../docs/MiniRepl';
+
+# 欢迎
+
+<div className="w-32 animate-pulse md:float-right ml-8">![Strudel Icon](/icons/strudel_icon.png)</div>
+
+欢迎来到 Strudel 工作坊！
+
+如果你想学习如何用代码制作音乐，你来对了地方。
+
+## 什么是 Strudel
+
+Strudel 允许你实时编写动态音乐作品。
+
+它是 [Tidal Cycles](https://tidalcycles.org/) 的 JavaScript 版本，由 Alex McLean 和 Felix Roos 于 2022 年发起。
+
+Tidal Cycles，也称为 Tidal，是一种用于算法模式的计算机语言。
+
+虽然它主要用于生成音乐，但它可以用于任何涉及模式的任务。
+
+你不需要有 JavaScript 或 Tidal Cycles 的经验来用 Strudel 制作音乐。
+
+这个互动工作坊将通过游戏方式引导你了解 Strudel 的基础知识。
+
+制作 Strudel 音乐的最佳地点是 [Strudel REPL](https://strudel.cc/)。
+
+## 你可以用 Strudel 做什么？
+
+- 音乐实时编码：用代码实时制作音乐
+- 算法作曲：使用 Tidal 独特的模式语言编写音乐
+- 教学：Strudel 适合教师，因为不需要安装，并且语言不需要理论知识。
+- 与其他音乐应用程序结合：通过 MIDI 或 OSC，Strudel 可以作为灵活的序列器与任何设置结合
+
+## 示例
+
+这里是一个 Strudel 听起来如何的示例：
+
+<MiniRepl
+  client:idle
+  tune={`stack(
+  // drums
+  s("bd,[~ <sd!3 sd(3,4,2)>],hh*8")
+  .speed(perlin.range(.8,.9)), // random sample speed variation
+  // bassline
+  "<a1 b1\*2 a1(3,8) e2>" 
+  .off(1/8,x=>x.add(12).degradeBy(.5)) // random octave jumps
+  .add(perlin.range(0,.5)) // random pitch variation
+  .superimpose(add(.05)) // add second, slightly detuned voice
+  .note() // wrap in "note"
+  .decay(.15).sustain(0) // make each note of equal length
+  .s('sawtooth') // waveform
+  .gain(.4) // turn down
+  .cutoff(sine.slow(7).range(300,5000)), // automate cutoff
+  // chords
+  "<Am7!3 <Em7 E7b13 Em7 Ebm7b5>>".voicings('lefthand') 
+  .superimpose(x=>x.add(.04)) // add second, slightly detuned voice
+  .add(perlin.range(0,.5)) // random pitch variation
+  .note() // wrap in "note"
+  .s('sawtooth') // waveform
+  .gain(.16) // turn down
+  .cutoff(500) // fixed cutoff
+  .attack(1) // slowly fade in
+)
+.slow(3/2)`}
+/>
+
+更多示例请见 [这里](/examples)。
+
+你也可以在 [Strudel REPL](https://strudel.cc/) 中点击 `shuffle` 来听一个随机示例。
+
+## 工作坊
+
+学习 Strudel 的最佳方式是接下来的工作坊。
+
+如果你准备好了，让我们从你的 [第一个声音](/zh/workshop/first-sounds) 开始。

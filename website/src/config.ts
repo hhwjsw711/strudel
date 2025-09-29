@@ -25,6 +25,7 @@ export type Frontmatter = {
 export const KNOWN_LANGUAGES = {
   English: 'en',
   German: 'de',
+  Chinese: 'zh',
 } as const;
 export const KNOWN_LANGUAGE_CODES = Object.values(KNOWN_LANGUAGES);
 
@@ -51,6 +52,17 @@ export const SIDEBAR: Sidebar = {
       { text: 'Pattern Effekte', link: 'de/workshop/pattern-effects' },
       { text: 'Rückblick', link: 'de/workshop/recap' },
       { text: 'Mehr Seiten auf Englisch', link: 'workshop/getting-started' },
+    ],
+  },
+  zh: {
+    Workshop: [
+      { text: '介绍', link: 'zh/workshop/getting-started' },
+      { text: '第一个声音', link: 'zh/workshop/first-sounds' },
+      { text: '第一个音符', link: 'zh/workshop/first-notes' },
+      { text: '第一个效果', link: 'zh/workshop/first-effects' },
+      { text: '模式效果', link: 'zh/workshop/pattern-effects' },
+      { text: '回顾', link: 'zh/workshop/recap' },
+      { text: '更多英文页面', link: 'workshop/getting-started' },
     ],
   },
   en: {
